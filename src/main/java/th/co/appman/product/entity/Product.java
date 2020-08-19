@@ -11,9 +11,14 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     private Long id;
 
+    @Basic
+    @Column(nullable = false, length = 120)
     private String productName;
 
+    @Basic
+    @Column(nullable = false)
     private String productDesc;
 }
