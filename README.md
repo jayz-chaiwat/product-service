@@ -20,7 +20,7 @@ install with **[Chocolatey](https://chocolatey.org/install)** (Windows)
 > choco install maven
 ```
 
-**Docker-desktop** install manually.
+> **Docker-desktop** install manually.
 
 ## How to build
 
@@ -36,7 +36,7 @@ mvn clean package -DskipTests
 - Docker Build Image
 ``` shell
 export IMAGE_TAG=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-docker build <<dockerhub-user>>/product-service:$IMAGE_TAG .
+docker build $DOCKER_USER/product-service:$IMAGE_TAG .
 ```
 > **On Window** get IMAGE_TAG=project.version in pom.xml 
 
