@@ -51,4 +51,4 @@ docker push product-service:$IMAGE_TAG
 
 ## How to run
 
-Set environment link : https://github.com/appman-agm/local-devops/blob/feature/workshop/README.md
+Set environment link : https://github.com/appman-agm/local-devops/tree/feature/workshop
