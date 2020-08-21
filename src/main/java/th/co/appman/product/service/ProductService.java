@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import th.co.appman.product.dto.Detail;
 import th.co.appman.product.dto.DetailResponse;
 import th.co.appman.product.dto.ProductDetail;
-import th.co.appman.product.entity.Detail;
 import th.co.appman.product.entity.Product;
 import th.co.appman.product.repository.ProductRepository;
 
@@ -21,7 +19,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class ProductService {
 
     @Value("${detail.service.url}")
