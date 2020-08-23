@@ -75,7 +75,7 @@ jobs:
           name: Publish Docker Image to Docker Hub
           command: |
             echo "$DOCKER_USER" | docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"
-            docker manifest inspect $IMAGE_NAME:$IMAGE_TAG > /dev/null ; if [[ \$? -eq 0 ]] ; then exit 1 ; else exit 0 ; fi
+            ! docker manifest inspect $IMAGE_NAME:$IMAGE_TAG > /dev/null
             docker push $IMAGE_NAME:$IMAGE_TAG
 workflows:
   version: 2
