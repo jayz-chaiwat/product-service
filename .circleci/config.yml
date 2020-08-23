@@ -42,6 +42,7 @@ jobs:
       - run:
           name: Initial Environment variable
           command: |
+            echo 'export IMAGE_TAG=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)' >> $BASH_ENV
             echo 'export PROJECT_NAME=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)' >> $BASH_ENV
             echo 'export IMAGE_NAME=$DOCKER_USER/$PROJECT_NAME' >> $BASH_ENV
             source $BASH_ENV
