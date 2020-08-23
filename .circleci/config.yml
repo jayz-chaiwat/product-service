@@ -35,15 +35,15 @@ jobs:
   publish-latest:
     executor: docker-publisher
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
       - run:
           name: Initial Environment variable
           command: |
             echo 'export PROJECT_NAME=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)' >> $BASH_ENV
             echo 'export IMAGE_NAME=$DOCKER_USER/$PROJECT_NAME' >> $BASH_ENV
             source $BASH_ENV
-      - attach_workspace:
-          at: /tmp/workspace
-      - setup_remote_docker
       - run:
           name: Load archived Docker image
           command: docker load -i /tmp/workspace/image.tar
@@ -55,6 +55,9 @@ jobs:
   publish-tag:
     executor: docker-publisher
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
       - run:
           name: Initial Environment variable
           command: |
@@ -63,9 +66,6 @@ jobs:
             echo 'export IMAGE_NAME=$DOCKER_USER/$PROJECT_NAME' >> $BASH_ENV
             echo 'export DOCKER_CLI_EXPERIMENTAL=enabled' >> $BASH_ENV
             source $BASH_ENV
-      - attach_workspace:
-          at: /tmp/workspace
-      - setup_remote_docker
       - run:
           name: Load archived Docker image
           command: docker load -i /tmp/workspace/image.tar
