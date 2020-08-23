@@ -12,10 +12,9 @@ jobs:
       - run:
           name: Initial Environment variable
           command: |
-            echo 'export IMAGE_TAG=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)' >> env-vars
-            echo 'export PROJECT_NAME=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)' >> env-vars
-            echo 'export IMAGE_NAME=$DOCKER_USER/$PROJECT_NAME' >> env-vars
-            cat env-vars >> $BASH_ENV
+            echo 'export IMAGE_TAG=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)' >> $BASH_ENV
+            echo 'export PROJECT_NAME=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)' >> $BASH_ENV
+            echo 'export IMAGE_NAME=$DOCKER_USER/$PROJECT_NAME' >> $BASH_ENV
             source $BASH_ENV
       - run:
           name: Build spring boot jar
@@ -33,17 +32,18 @@ jobs:
           root: .
           paths:
             - ./image.tar
-            - ./env-vars
   publish-latest:
     executor: docker-publisher
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker
       - run:
           name: Initial Environment variable
           command: |
-            cat /tmp/workspace/env-vars >> $BASH_ENV
+            echo 'export PROJECT_NAME=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)' >> $BASH_ENV
+            echo 'export IMAGE_NAME=$DOCKER_USER/$PROJECT_NAME' >> $BASH_ENV
             source $BASH_ENV
       - run:
           name: Load archived Docker image
@@ -56,13 +56,17 @@ jobs:
   publish-tag:
     executor: docker-publisher
     steps:
+      - checkout
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker
       - run:
           name: Initial Environment variable
           command: |
-            cat /tmp/workspace/env-vars >> $BASH_ENV
+            echo 'export IMAGE_TAG=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)' >> $BASH_ENV
+            echo 'export PROJECT_NAME=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)' >> $BASH_ENV
+            echo 'export IMAGE_NAME=$DOCKER_USER/$PROJECT_NAME' >> $BASH_ENV
+            echo 'export DOCKER_CLI_EXPERIMENTAL=enabled' >> $BASH_ENV
             source $BASH_ENV
       - run:
           name: Load archived Docker image
@@ -72,10 +76,8 @@ jobs:
           command: |
             echo "$DOCKER_USER" | docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"
             if docker manifest inspect $IMAGE_NAME:$IMAGE_TAG > /dev/null; then
-                echo -e "Version $IMAGE_TAG already exists."
+                echo -e "Version $IMAGE_TAG already exists"
                 exit 1
-            else
-                echo -e "Version $IMAGE_TAG can be push."
             fi
             docker push $IMAGE_NAME:$IMAGE_TAG
 workflows:
