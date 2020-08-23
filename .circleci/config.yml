@@ -76,10 +76,8 @@ jobs:
           command: |
             echo "$DOCKER_USER" | docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"
             if docker manifest inspect $IMAGE_NAME:$IMAGE_TAG > /dev/null; then
-                echo -e "Version $VERSION already exists"
+                echo -e "Version $IMAGE_TAG already exists"
                 exit 1
-            else
-                echo -e "Version $VERSION is available"
             fi
             docker push $IMAGE_NAME:$IMAGE_TAG
 workflows:
